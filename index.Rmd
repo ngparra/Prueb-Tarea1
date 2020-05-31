@@ -15,7 +15,6 @@ library(kableExtra)
 library(dplyr)
 library(ggplot2)
 library(spData)
-
 infomapa_covid19cr_cantones = st_read("https://raw.githubusercontent.com/geoprocesamiento-2020i/datos/master/covid19/casos/cr/cr-covid19-cantones.geojson")
 ```
 
@@ -36,19 +35,14 @@ pal <- colorQuantile("Blues", infomapa_covid19cr_cantones$confirmados, n = 5)
     fillOpacity = 3,
     popup = paste( "Cantón:"
                  , infomapa_covid19cr_cantones$canton
-                 
                  ,"Casos Confirmados:"
                  , infomapa_covid19cr_cantones$confirmados
-                 
                  ,"Casos Activos:"
                  , infomapa_covid19cr_cantones$activos
-                 
                  ,"Casos Recuperados:"
                  , infomapa_covid19cr_cantones$recuperados
-                 
                  ,"Fallecidos:"
                  , infomapa_covid19cr_cantones$muertes
-                 
                  , "<br>"
                  , "<a href='"
                  , infomapa_covid19cr_cantones$geometry))%>% addLegend(pal = pal, values = ~confirmados, opacity = 0.7, title = NULL,
@@ -75,7 +69,6 @@ tprovinciaconfirmados <-(infomapa_covid19cr_cantones %>%
    summarize(confirmados = sum(confirmados, na.rm = TRUE)) %>% 
      arrange(desc(confirmados)) %>%
      st_drop_geometry())
-
 ggplot(tprovinciaconfirmados, aes(x=reorder(provincia, -confirmados), y=confirmados)) +
      ggtitle("Casos confirmados en CR por provincia") +
      xlab("Provincia") + 
