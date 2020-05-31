@@ -2,7 +2,7 @@
 title: "Prueba Tarea1"
 output: 
   flexdashboard::flex_dashboard:
-    orientation: columns
+    orientation: rows
     vertical_layout: fill
 ---
 
@@ -18,7 +18,7 @@ library(spData)
 infomapa_covid19cr_cantones = st_read("https://raw.githubusercontent.com/geoprocesamiento-2020i/datos/master/covid19/casos/cr/cr-covid19-cantones.geojson")
 ```
 
-Column {data-width=650}
+Column { .sidebar data-width=650}
 -----------------------------------------------------------------------
 
 ### Chart A
@@ -55,10 +55,24 @@ position = "bottomright")
 ### Chart B
 
 ```{r}
-
+tablaconfirmados_fallecidos_recuperados <-(infomapa_covid19cr_cantones %>% 
+                  select(canton, confirmados, muertes, recuperados) %>% 
+                              group_by(canton) %>% 
+                              arrange(canton) %>%
+                              st_drop_geometry())
+kable( tablaconfirmados_fallecidos_recuperados[1:82, c("canton","confirmados","muertes","recuperados"), drop = TRUE], 
+     col.names=c("Cantón","Confirmados","Fallecidos","Recuperados"),  
+     caption="Tabla de datos Covid-19 para CR")
+%>%
+     kable_styling() %>%
+    scroll_box(
+         width = "800px", 
+         height = "500px", 
+         fixed_thead = TRUE
+     )
 ```
 
-Column {data-width=550}
+Row {data-height=550}
 -----------------------------------------------------------------------
 ### Chart C
 
