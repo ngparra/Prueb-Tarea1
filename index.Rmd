@@ -68,7 +68,7 @@ ggplot(tprovinciaconfirmados, aes(x=reorder(provincia, -confirmados), y=confirma
 ```
 
 
-Row { data-height=650}
+Row { data-height=350}
 -----------------------------------------------------------------------
 
 ### Chart B
