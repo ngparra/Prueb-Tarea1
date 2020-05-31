@@ -8,6 +8,15 @@ output:
 
 ```{r setup, include=FALSE}
 library(flexdashboard)
+library(sf)
+library(leaflet)
+library(knitr)
+library(kableExtra)
+library(dplyr)
+library(ggplot2)
+library(spData)
+
+infomapa_covid19cr_cantones = st_read("https://raw.githubusercontent.com/geoprocesamiento-2020i/datos/master/covid19/casos/cr/cr-covid19-cantones.geojson")
 ```
 
 Column {data-width=650}
@@ -16,11 +25,38 @@ Column {data-width=650}
 ### Chart A
 
 ```{r}
+m <- leaflet(infomapa_covid19cr_cantones)
+pal <- colorQuantile("Blues", infomapa_covid19cr_cantones$confirmados, n = 5)
+ m %>% addPolygons(
+      fillColor = ~pal(confirmados),
+      weight = 0,
+     opacity = 5,
+    color = "black",
+     dashArray = "3",
+    fillOpacity = 3,
+    popup = paste( "Cantón:"
+                 , infomapa_covid19cr_cantones$canton
+                 
+                 ,"Casos Confirmados:"
+                 , infomapa_covid19cr_cantones$confirmados
+                 
+                 ,"Casos Activos:"
+                 , infomapa_covid19cr_cantones$activos
+                 
+                 ,"Casos Recuperados:"
+                 , infomapa_covid19cr_cantones$recuperados
+                 
+                 ,"Fallecidos:"
+                 , infomapa_covid19cr_cantones$muertes
+                 
+                 , "<br>"
+                 , "<a href='"
+                 , infomapa_covid19cr_cantones$geometry))%>% addLegend(pal = pal, values = ~confirmados, opacity = 0.7, title = NULL,
+position = "bottomright")
 
 ```
 
-Column {data-width=350}
------------------------------------------------------------------------
+
 
 ### Chart B
 
@@ -28,6 +64,8 @@ Column {data-width=350}
 
 ```
 
+Column {data-width=250}
+-----------------------------------------------------------------------
 ### Chart C
 
 ```{r}
