@@ -64,11 +64,23 @@ position = "bottomright")
 
 ```
 
-Column {data-width=250}
+Column {data-width=550}
 -----------------------------------------------------------------------
 ### Chart C
 
 ```{r}
+tprovinciaconfirmados <-(infomapa_covid19cr_cantones %>% 
+  select( provincia, confirmados) %>% 
+   group_by(provincia) %>% 
+   summarize(confirmados = sum(confirmados, na.rm = TRUE)) %>% 
+     arrange(desc(confirmados)) %>%
+     st_drop_geometry())
 
+ggplot(tprovinciaconfirmados, aes(x=reorder(provincia, -confirmados), y=confirmados)) +
+     ggtitle("Casos confirmados en CR por provincia") +
+     xlab("Provincia") + 
+     ylab("Casos confirmados") +  
+     geom_col() +
+     geom_text(aes(label=confirmados), vjust=-0.3, size=3.5)
 ```
 
